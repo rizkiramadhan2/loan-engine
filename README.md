@@ -214,6 +214,50 @@ CREATE TABLE IF NOT EXISTS public.loan_disbursement (
 );
 ```
 
+
+## Function Implementation
+### Handler
+location: app/api/http/handler/loan.go
+To validate incoming request before forward to process
+- **CreateLoan():** Create a new loan application.
+- **ApproveLoan():** Approve a loan application.
+- **InvestLoan():** Invest in a loan opportunity.
+- **DisburseLoan():** Transfer approved loan amounts.
+- **GetDetail():** Retrieve detailed information about a loan.
+- **GetList():** Retrieve a list of loans.
+
+### UseCase
+location: internal/usecase/loan/loan.go
+To handle logic and rule of loan
+- **CreateLoan():** 
+- **ApproveLoan():**
+- **InvestLoan():** 
+- **DisburseLoan():** 
+- **GetDetail():**
+- **GetList():** 
+
+### Repository
+To get resource data from db
+
+#### fetch: getter data
+location: internal/repository/loan/fetch.go
+- **GetByID()**
+- **GetList()**
+- **GetInvestByID()**
+- **GetDisburseByID()**
+
+#### mutation: setter data
+location: internal/repository/loan/mutation.go
+
+- **Create()**
+- **Approve()**
+- **UpdateStatus()**
+- **Invest()**
+- **Disburse()**
+
+
+
+
 ## Code Layout
 
 ```
