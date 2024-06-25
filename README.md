@@ -232,33 +232,35 @@ To validate incoming request before forward to process
 - **GetList():** Retrieve a list of loans.
 
 ### UseCase
-location: internal/usecase/loan/loan.go
-To handle logic and rule of loan
-- **CreateLoan():** 
-- **ApproveLoan():**
-- **InvestLoan():** 
-- **DisburseLoan():** 
-- **GetDetail():**
-- **GetList():** 
+**Location: `internal/usecase/loan/loan.go`**
+Handles the logic and rules of loan operations.
+
+- **CreateLoan():** Logic to create a new loan application.
+- **ApproveLoan():** Logic to approve a loan application.
+- **InvestLoan():** Logic to invest in a loan.
+- **DisburseLoan():** Logic to disburse approved loan amounts.
+- **GetDetail():** Logic to retrieve detailed information about a loan.
+- **GetList():** Logic to retrieve a list of loans.
 
 ### Repository
-To get resource data from db
+Handles data retrieval and modification from the database.
 
-#### fetch: getter data
-location: internal/repository/loan/fetch.go
-- **GetByID()**
-- **GetList()**
-- **GetInvestByID()**
-- **GetDisburseByID()**
+#### Fetch: Getter Data
+**Location: `internal/repository/loan/fetch.go`**
 
-#### mutation: setter data
-location: internal/repository/loan/mutation.go
+- **GetByID():** Retrieve loan details by ID.
+- **GetList():** Retrieve a list of loans.
+- **GetInvestByID():** Retrieve investment details by loan ID.
+- **GetDisburseByID():** Retrieve disbursement details by loan ID.
 
-- **Create()**
-- **Approve()**
-- **UpdateStatus()**
-- **Invest()**
-- **Disburse()**
+#### Mutation: Setter Data
+**Location: `internal/repository/loan/mutation.go`**
+
+- **Create():** Create a new loan record.
+- **Approve():** Approve a loan application in the database.
+- **UpdateStatus():** Update the status of a loan.
+- **Invest():** Record an investment in a loan.
+- **Disburse():** Record the disbursement of loan funds.
 
 
 
