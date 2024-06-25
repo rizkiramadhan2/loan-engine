@@ -1,6 +1,18 @@
 
 # Loan Engine
 
+## Pre-requisite
+1. Docker Compose v2.20+
+
+## Run Server
+```sh
+make dev
+```
+
+The server will run on port 4040.
+
+Test: [http://localhost:4040/ping](http://localhost:4040/ping)
+
 ## API Design
 
 ### GET /loans
@@ -157,8 +169,8 @@ Disburse a loan, will update status to 'disbursed'
 **Response:**
 ```json
 {
-    "signed_agreement_url": "http://example-of-agreement-url",
-    "disburser_employee_id": 1
+    "loan_id": 4,
+    "status": "disbursed"
 }
 ```
 
@@ -281,16 +293,3 @@ CREATE TABLE IF NOT EXISTS public.loan_disbursement (
 - **usecase**: Business logic layer, containing the core functionality and rules.
   - **loan**: Use cases related to loans.
     - **loan.go**: Business logic for loan operations.
-
-## Pre-requisite
-1. Docker Compose v2.20+
-
-## Run Server
-```sh
-make dev
-```
-
-The server will run on port 4040.
-
-Test: [http://localhost:4040/ping](http://localhost:4040/ping)
-```
