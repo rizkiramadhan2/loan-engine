@@ -1,0 +1,49 @@
+version: '3.2'
+
+services: 
+  simple-app:
+    image: simple-app
+    build:
+        context: .
+        dockerfile: development.dockerfile
+    volumes:
+        - "../.:/go/src/simple-app"
+    ports:
+        - "4040:4040"
+    depends_on:
+        - pg
+    command: [ "air", "-c", ".dev/api.air.toml" ]
+    container_name: simple-app
+    networks:
+      sampleapp:
+    environment:
+      - APP_ENV=${APP_ENV} 
+      - SECRET_KEY=${SECRET_KEY}
+      - SECRET_REFRESH_KEY=${SECRET_REFRESH_KEY}
+      - DBM_DEV_MASTER_DB=postgres://postgres:@simple_app_db:5432/simpleapp?sslmode=disable&TimeZone=Asia/Jakarta
+      - DBM_SQL_PATH=.dev/db_migration/
+  pg:
+    image: "postgres:11"
+    container_name: "simple_app_db"
+    ports:
+      - "4444:5432"
+    environment:
+      POSTGRES_DB: simpleapp
+      POSTGRES_HOST_AUTH_METHOD: trust
+    networks:
+      sampleapp:
+    volumes:
+      - ./pg/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./pg/data:/var/lib/postgresql/data
+    restart: always
+  redis:
+    image: redis
+    container_name: simple_app_redis
+    restart: always
+    ports:
+      - "4445:6379"
+    networks:
+      sampleapp:
+
+networks:
+  sampleapp:

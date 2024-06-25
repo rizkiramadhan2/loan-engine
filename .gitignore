@@ -1,0 +1,13 @@
+.idea/*
+!.idea/watcherTasks.xml
+
+**/vendor/**
+
+**/mysql/data/**
+!**/.gitkeep
+http_api
+.dev/pg/data
+.dev/.env
+
+.dev/tmp/api
+.dev/tmp/**

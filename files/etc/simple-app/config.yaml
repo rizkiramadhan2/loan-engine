@@ -1,0 +1,16 @@
+app:
+  port: ":4040"
+
+databases:
+  mysql:
+    master: "devel:devel@tcp(mysql:3306)/test_db"
+  postgres:
+    master: postgres://postgres:@simple_app_db:5432/simpleapp?sslmode=disable&TimeZone=Asia/Jakarta
+    slave: postgres://postgres:@simple_app_db:5432/simpleapp?sslmode=disable&TimeZone=Asia/Jakarta
+    max_con: 10
+    retry: 3
+  redis:
+    address: "simple_app_redis:6379"
+    timeout: 100
+    max_idle: 100
+    max_active: 10
