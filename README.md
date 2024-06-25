@@ -121,7 +121,7 @@ Request a loan and give default status of 'proposed'
 }
 ```
 
-### POST /loans/:id/approve
+### PATCH /loans/:id/approve
 Approve a loan, will update status to 'approved'
 
 **Request:**

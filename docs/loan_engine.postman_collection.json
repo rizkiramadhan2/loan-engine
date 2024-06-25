@@ -37,7 +37,7 @@
 		{
 			"name": "approve loan",
 			"request": {
-				"method": "POST",
+				"method": "PATCH",
 				"header": [],
 				"body": {
 					"mode": "raw",

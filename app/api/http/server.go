@@ -50,7 +50,7 @@ func Run(port string) {
 	loans.GET("/:id/detail", s.handler.GetDetail)
 
 	loans.POST("", s.handler.CreateLoan)
-	loans.POST("/:id/approve", s.handler.ApproveLoan)
+	loans.PATCH("/:id/approve", s.handler.ApproveLoan)
 	loans.POST("/:id/invest", s.handler.InvestLoan)
 	loans.POST("/:id/disburse", s.handler.DisburseLoan)
 
