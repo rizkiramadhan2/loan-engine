@@ -1,0 +1,168 @@
+{
+	"info": {
+		"_postman_id": "e3f10595-21ae-4ef1-b3f0-5f92a955c23d",
+		"name": "Loan Engine",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7144822"
+	},
+	"item": [
+		{
+			"name": "create loan",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"borrower_id\": 1,\n    \"principal_amount\": 1500,\n    \"roi\": 0.1,\n    \"rate\": 0.2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4040/loans",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"loans"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "approve loan",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"picture_proof_url\": \"http://example-of-proof\",\n    \"approver_id\": 2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4040/loans/1/approve",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"loans",
+						"1",
+						"approve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "invest loan",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"investor_id\": 3,\n    \"amount\": 1500\n}   ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4040/loans/1/invest",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"loans",
+						"1",
+						"invest"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "disburse loan",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"signed_agreement_url\": \"http://example-of-agreement-url\",\n    \"disburser_employee_id\": 1\n}   ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4040/loans/1/disburse",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"loans",
+						"1",
+						"disburse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get loan detail",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4040/loans/2/detail",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"loans",
+						"2",
+						"detail"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get list of loan",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4040/loans",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4040",
+					"path": [
+						"loans"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

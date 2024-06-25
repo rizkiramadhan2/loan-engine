@@ -19,7 +19,7 @@ The server will run on port 4040.
 Test: [http://localhost:4040/ping](http://localhost:4040/ping)
 
 ## API Design
-
+Postman collection: [Postman collection](http://localhost:4040/ping)
 ### GET /loans
 Get list of loans
 
@@ -282,6 +282,8 @@ location: internal/repository/loan/mutation.go
 ├── config
 │   ├── config.go
 │   └── type.go
+├── docs
+│   └── loan_engine.postman_collection.json
 ├── files
 │   └── etc
 │       └── simple-app
@@ -322,6 +324,9 @@ location: internal/repository/loan/mutation.go
 ### config Directory
 - **config.go**: Logic for loading and managing configuration settings.
 - **type.go**: Defines configuration-related types and structures.
+
+### docs Directory
+- **loan_engine.postman_collection.json**: loan engine postman collection.
 
 ### files Directory
 - **etc**: Likely for configuration and environment-specific files.
