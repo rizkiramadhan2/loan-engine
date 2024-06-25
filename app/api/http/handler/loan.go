@@ -61,6 +61,11 @@ func (h *Handler) ApproveLoan(c *gin.Context) {
 
 	res, err := h.loan.Approve(c.Request.Context(), loan)
 	if err != nil {
+		if err.Error() == "status is already approved" {
+			response.Err(c, response.WrapErrCode(err, response.BadRequestErrCode), err.Error())
+			return
+		}
+
 		response.Err(c, response.WrapErrCode(err, response.InternalErrCode), err.Error())
 		return
 	}
@@ -93,6 +98,11 @@ func (h *Handler) InvestLoan(c *gin.Context) {
 
 	idLoan, total, status, err := h.loan.Invest(c.Request.Context(), invest)
 	if err != nil {
+		if err.Error() == "status of loan is invalid" {
+			response.Err(c, response.WrapErrCode(err, response.BadRequestErrCode), err.Error())
+			return
+		}
+
 		response.Err(c, response.WrapErrCode(err, response.InternalErrCode), err.Error())
 		return
 	}
@@ -125,6 +135,11 @@ func (h *Handler) DisburseLoan(c *gin.Context) {
 
 	idLoan, err := h.loan.Disburse(c.Request.Context(), disburse)
 	if err != nil {
+		if err.Error() == "status of loan is invalid" {
+			response.Err(c, response.WrapErrCode(err, response.BadRequestErrCode), err.Error())
+			return
+		}
+
 		response.Err(c, response.WrapErrCode(err, response.InternalErrCode), err.Error())
 		return
 	}
