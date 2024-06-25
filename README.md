@@ -1,6 +1,11 @@
 
 # Loan Engine
 
+## Stack
+1. Go 1.21 (inside docker) with Gin HTTP Framework
+2. Postgresql 11 (inside docker)
+
+
 ## Pre-requisite
 1. Docker Compose v2.20+
 
