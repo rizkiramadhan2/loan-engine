@@ -146,7 +146,7 @@ func (u *Usecase) Invest(ctx context.Context, param model.Invest) (id int, total
 		return id, total, status, err
 	}
 
-	return data.ID, total, loan.Status.ToString(), err
+	return data.LoanID, total, loan.Status.ToString(), err
 
 }
 
@@ -189,7 +189,7 @@ func (u *Usecase) Disburse(ctx context.Context, param model.Disburse) (id int, e
 		return id, err
 	}
 
-	return data.ID, err
+	return data.LoanID, err
 
 }
 
