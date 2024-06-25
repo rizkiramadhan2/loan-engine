@@ -19,7 +19,7 @@ The server will run on port 4040.
 Test: [http://localhost:4040/ping](http://localhost:4040/ping)
 
 ## API Design
-Postman collection: [Postman collection](http://localhost:4040/ping)
+Postman collection: [Postman collection](https://github.com/rizkiramadhan2/loan-engine/blob/main/docs/loan_engine.postman_collection.json)
 ### GET /loans
 Get list of loans
 
