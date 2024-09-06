@@ -7,6 +7,13 @@ import (
 	"github.com/pkg/errors"
 )
 
+// interface implementation check
+var (
+	_ error                       = &Error{}
+	_ interface{ Unwrap() error } = &Error{}
+	_ interface{ Is(error) bool } = &Error{}
+)
+
 // Error struct
 type Error struct {
 	// for response
@@ -28,6 +35,29 @@ func ErrIs(err error, code Code) bool {
 	return false
 }
 
+// UnwrapErr unwraps error
+func UnwrapErr(err error) error {
+	if e, ok := err.(*Error); ok {
+		return e.cause
+	}
+	return err
+}
+
+// Is implementation
+func (e *Error) Is(target error) bool {
+	if target, ok := target.(*Error); ok {
+		if e.code.code == target.code.code {
+			return true
+		}
+	}
+
+	if errors.Is(e.cause, target) {
+		return true
+	}
+
+	return false
+}
+
 // Code getter
 func (e *Error) Code() Code {
 	return e.code
@@ -38,8 +68,16 @@ func (e *Error) Cause() error {
 	return e.cause
 }
 
+// Unwrap unwraps the error
+func (e *Error) Unwrap() error {
+	return e.cause
+}
+
 // Error implementation of error interface
 func (e Error) Error() string {
+	if e.errMsg == "" {
+		return e.cause.Error()
+	}
 	return e.errMsg + ": " + e.cause.Error()
 }
 
@@ -79,14 +117,18 @@ func wrapErrCode(err error, code Code, msg ...string) *Error {
 			userMsg: code.userMsg,
 
 			cause:      err,
-			errMsg:     err.Error(),
+			errMsg:     "",
 			stackTrace: makeTrace(1),
 		}
 	}
 
 	// replace msg from current stack
 	if len(msg) > 0 {
-		newErr.errMsg = msg[0] + ": " + newErr.errMsg
+		if newErr.errMsg == "" {
+			newErr.errMsg = msg[0]
+		} else {
+			newErr.errMsg = msg[0] + ": " + newErr.errMsg
+		}
 	}
 
 	return newErr

@@ -2,11 +2,15 @@ package response
 
 import "net/http"
 
-const (
-	genericErrorMsg        = "Uh oh! Something unexpected occurred. Please send a report to <support contact> so we can fix it."
+func init() {
+	setDefaults()
+}
+
+var (
+	genericErrorMsg        = "Uh oh! Something unexpected occurred. Please send a report to support@your-app.com so we can fix it."
 	paymentRequiredMsg     = "You need to upgrade your plan to access this feature."
 	forbiddenMsg           = "You do not have the necessary permissions to view this item."
-	notFoundMsg            = "Oops! We couldn't find what you were looking for. Please send a report to <support contact> if you believe this was an error."
+	notFoundMsg            = "Oops! We couldn't find what you were looking for. Please send a report to support@your-app.com if you believe this was an error."
 	unprocessableEntityMsg = "The request could not be processed correctly due to a mistake in the information provided. Please review and try again."
 	tooManyRequestMsg      = "You've made too many requests. Please take a break and try again later."
 	unauthorizedMsg        = "Sorry, you need to be logged in to access this page. Please log in and try again."
@@ -64,6 +68,29 @@ func (c *Code) HTTPCode() int {
 
 // write any std response code constant here
 var (
+	// SuccessCode success code
+	SuccessCode Code
+	// BadRequestErrCode bad request code
+	BadRequestErrCode Code
+	// UnauthorizedCode unauthorized code
+	UnauthorizedCode Code
+	// PaymentRequiredCode response Code
+	PaymentRequiredCode Code
+	// ForbiddenAccessCode forbidden access code
+	ForbiddenAccessCode Code
+	// NotFoundCode data not found
+	NotFoundCode Code
+	// UnprocessableCode unprocessable entity
+	UnprocessableCode Code
+	// TooManyRequestCode rate limit request
+	TooManyRequestCode Code
+	// InternalErrCode success code
+	InternalErrCode Code
+	// NotImplementedCode not implemented code
+	NotImplementedCode Code
+)
+
+func setDefaults() {
 	// SuccessCode success code
 	SuccessCode = Code{
 		code:     "SUCCESS",
@@ -134,4 +161,4 @@ var (
 		devMsg:   "Not Implemented",
 		userMsg:  "Not Implemented",
 	}
-)
+}

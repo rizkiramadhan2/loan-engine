@@ -2,18 +2,35 @@ package main
 
 import (
 	"context"
-	"log"
+	"flag"
 	"os"
 
 	"simple-app/app/api/http"
 	"simple-app/config"
+	"simple-app/internal/pkg/log"
 	"simple-app/internal/pkg/response"
 	"simple-app/internal/pkg/sqldb"
 	lnRepo "simple-app/internal/repository/loan"
 	lnuc "simple-app/internal/usecase/loan"
 )
 
+var (
+	errLogPath   string
+	infoLogPath  string
+	debugLogPath string
+	appName      = "simple-app"
+)
+
 func main() {
+	flag.StringVar(&infoLogPath, "l", "", "info log")
+	flag.StringVar(&errLogPath, "e", "", "error log")
+	flag.StringVar(&debugLogPath, "d", "", "debug log")
+	flag.Parse()
+
+	log.SetLog(log.ErrorLevel, errLogPath, appName)
+	log.SetLog(log.InfoLevel, infoLogPath, appName)
+	log.SetLog(log.DebugLevel, debugLogPath, appName)
+
 	err := config.Init()
 	if err != nil {
 		log.Fatal(err)
@@ -39,9 +56,11 @@ func main() {
 		return
 	}
 
-	if os.Getenv("APP_ENV") == "development" {
-		response.EnableStackTrace(true)
-	}
+	withStackTrace := os.Getenv("APP_ENV") == "development"
+
+	response.Init(response.Opts{
+		WithStackTrace: withStackTrace,
+	})
 
 	/* initialize repo */
 	loanRepo := lnRepo.New(lnRepo.Param{

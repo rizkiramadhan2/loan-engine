@@ -2,7 +2,6 @@ package http
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,6 +10,8 @@ import (
 
 	"simple-app/app"
 	"simple-app/app/api/http/handler"
+	"simple-app/internal/pkg/log"
+	"simple-app/internal/pkg/response"
 
 	"github.com/gin-gonic/gin"
 )
@@ -40,6 +41,8 @@ func Init(deps Dependencies) {
 // Run run http server
 func Run(port string) {
 	r := gin.Default()
+
+	r.Use(response.Middleware)
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.String(http.StatusOK, "You know, for checking...")

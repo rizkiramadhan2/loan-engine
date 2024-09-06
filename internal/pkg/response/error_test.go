@@ -96,7 +96,7 @@ func TestErrorFunc(t *testing.T) {
 				userMsg: tt.fields.msg,
 
 				cause:      tt.fields.err,
-				errMsg:     tt.fields.err.Error(),
+				errMsg:     "",
 				stackTrace: tt.fields.stackTrace,
 			}
 
@@ -239,14 +239,7 @@ func TestError_Error(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			e := Error{
-				code:       tt.fields.code,
-				userMsg:    tt.fields.userMsg,
-				data:       tt.fields.data,
-				cause:      tt.fields.cause,
-				errMsg:     tt.fields.errMsg,
-				stackTrace: tt.fields.stackTrace,
-			}
+			e := NewError(tt.fields.errMsg)
 			if got := e.Error(); got != tt.want {
 				t.Errorf("Error.Error() = %v, want %v", got, tt.want)
 			}
@@ -496,7 +489,7 @@ func Test_wrapErrCode(t *testing.T) {
 				userMsg:    BadRequestErrCode.userMsg,
 				data:       nil,
 				cause:      err1,
-				errMsg:     "msg: " + err1.Error(),
+				errMsg:     "msg",
 				stackTrace: nil, //TODO:
 			},
 		},
@@ -535,7 +528,7 @@ func TestNewError(t *testing.T) {
 				userMsg:    BadRequestErrCode.userMsg,
 				data:       nil,
 				cause:      nil,
-				errMsg:     "msg",
+				errMsg:     "",
 				stackTrace: nil,
 			},
 		},
@@ -574,7 +567,7 @@ func TestWrapErr(t *testing.T) {
 				userMsg:    InternalErrCode.userMsg,
 				data:       nil,
 				cause:      err1,
-				errMsg:     "msg: err",
+				errMsg:     "msg",
 				stackTrace: nil,
 			},
 		},
@@ -606,6 +599,38 @@ func Test_makeTrace(t *testing.T) {
 			if got := makeTrace(tt.args.skip); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("makeTrace() = %v, want %v", got, tt.want)
 			}
+		})
+	}
+}
+
+func TestUnwrapErr(t *testing.T) {
+	type args struct {
+		err error
+	}
+	err1 := errors.New("err")
+	tests := []struct {
+		name string
+		args args
+		want error
+	}{
+		{
+			name: "success",
+			args: args{
+				err: WrapErr(err1),
+			},
+			want: err1,
+		}, {
+			name: "success nil",
+			args: args{
+				err: nil,
+			},
+			want: nil,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := UnwrapErr(tt.args.err)
+			assert.Equal(t, got, tt.want)
 		})
 	}
 }

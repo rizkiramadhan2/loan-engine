@@ -4,8 +4,9 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"testing"
+
+	"simple-app/internal/pkg/errs"
 
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
@@ -28,7 +29,9 @@ func setupRouter(middleware []gin.HandlerFunc, routers ...func(r gin.IRoutes) gi
 }
 
 func TestResponseFull(t *testing.T) {
-	EnableStackTrace(true)
+	Init(Opts{
+		WithStackTrace: true,
+	})
 	tests := []struct {
 		name       string
 		method     string
@@ -46,7 +49,7 @@ func TestResponseFull(t *testing.T) {
 			},
 			handler: func(r gin.IRoutes) gin.IRoutes {
 				return r.GET("", func(c *gin.Context) {
-					Data(c, gin.H{"success": true})
+					DataResponse(c, gin.H{"success": true})
 				})
 			},
 			wantStatus: http.StatusOK,
@@ -57,7 +60,7 @@ func TestResponseFull(t *testing.T) {
 			middleware: []gin.HandlerFunc{},
 			handler: func(r gin.IRoutes) gin.IRoutes {
 				return r.GET("", func(c *gin.Context) {
-					Data(c, gin.H{"success": true})
+					DataResponse(c, gin.H{"success": true})
 				})
 			},
 			wantStatus: http.StatusOK,
@@ -73,7 +76,7 @@ func TestResponseFull(t *testing.T) {
 			},
 			handler: func(r gin.IRoutes) gin.IRoutes {
 				return r.GET("", func(c *gin.Context) {
-					Data(c, gin.H{"success": true})
+					DataResponse(c, gin.H{"success": true})
 				})
 			},
 			wantStatus: http.StatusOK,
@@ -170,7 +173,7 @@ func TestGetProcessingTime(t *testing.T) {
 	}
 }
 
-func Test_buildErr(t *testing.T) {
+func Test_buildErrResponse(t *testing.T) {
 	type args struct {
 		requestID      string
 		processingTime string
@@ -179,9 +182,10 @@ func Test_buildErr(t *testing.T) {
 	}
 	err1 := errors.New("err")
 	tests := []struct {
-		name string
-		args args
-		want Response
+		name  string
+		args  args
+		want1 int
+		want2 Response
 	}{
 		{
 			name: "success",
@@ -191,24 +195,45 @@ func Test_buildErr(t *testing.T) {
 				err:            wrapErrCode(err1, BadRequestErrCode),
 				data:           nil,
 			},
-			want: Response{
+			want1: BadRequestErrCode.HTTPCode(),
+			want2: Response{
 				RequestID:      "req-id",
 				Code:           BadRequestErrCode.Code(),
 				ProcessingTime: "0.01ns",
 				Data:           nil,
 				Reason:         BadRequestErrCode.userMsg,
 				Error:          BadRequestErrCode.devMsg,
-				code:           BadRequestErrCode,
+			},
+		},
+		{
+			name: "success - errs v2",
+			args: args{
+				requestID:      "req-id",
+				processingTime: "0.01ns",
+				err:            errs.NewErrBadRequest(),
+				data:           nil,
+			},
+			want1: BadRequestErrCode.HTTPCode(),
+			want2: Response{
+				RequestID:      "req-id",
+				Code:           errs.ErrTypeBadRequest.Code,
+				ProcessingTime: "0.01ns",
+				Data:           nil,
+				Reason:         errs.ErrTypeBadRequest.UserMsg(),
+				Error:          errs.ErrTypeBadRequest.PublicMsg(),
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := buildErr(tt.args.requestID, tt.args.processingTime, tt.args.err, tt.args.data...)
-			got.ErrorDetails = nil
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("buildErr() =\n%#v, want\n%#v", got, tt.want)
+			got1, got2 := BuildErrResponse(tt.args.requestID, tt.args.processingTime, tt.args.err, tt.args.data...)
+			got2.ErrorDetails = nil
+
+			if got1 != tt.want1 {
+				t.Errorf("buildErrResponse() got1 = %v, want %v", got1, tt.want1)
 			}
+			got2.err = nil
+			assert.Equal(t, tt.want2, got2)
 		})
 	}
 }

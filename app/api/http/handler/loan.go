@@ -15,7 +15,7 @@ func (h *Handler) CreateLoan(c *gin.Context) {
 	var loan model.Loan
 	err := c.ShouldBindJSON(&loan)
 	if err != nil {
-		response.Err(c, response.WrapErrCode(err, response.BadRequestErrCode), err.Error())
+		response.Err(c, response.WrapErrCode(err, response.BadRequestErrCode), err.Error()).LogCtx(c.Request.Context())
 		return
 	}
 
@@ -173,5 +173,5 @@ func (h *Handler) GetList(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, list)
+	c.JSON(http.StatusOK, gin.H{"data": list})
 }
